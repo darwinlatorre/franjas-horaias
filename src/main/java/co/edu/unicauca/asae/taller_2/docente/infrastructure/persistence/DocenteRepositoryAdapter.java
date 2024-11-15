@@ -1,5 +1,8 @@
 package co.edu.unicauca.asae.taller_2.docente.infrastructure.persistence;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,28 +19,35 @@ public class DocenteRepositoryAdapter implements DocenteRepositoryPort {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Override
     public Docente crear(Docente docente) {
         DocenteEntity docenteEntity = modelMapper.map(docente, DocenteEntity.class);
         DocenteEntity guardado = docenteRepository.save(docenteEntity);
         return modelMapper.map(guardado, Docente.class);
     }
 
-    public Docente encontrarPorId(Long idDocente) {
-        DocenteEntity docenteEntity = docenteRepository.findById(idDocente).orElse(null);
-        return modelMapper.map(docenteEntity, Docente.class);
-    }
-
-    public void eliminarPorId(Long idDocente) {
-        docenteRepository.deleteById(idDocente);
+    @Override
+    public Docente encontrarPorId(Long id) {
+        DocenteEntity docenteEntity = docenteRepository.findById(id).orElse(null);
+        return docenteEntity != null ? modelMapper.map(docenteEntity, Docente.class) : null;
     }
 
     @Override
-    public boolean encontrarDocentePorPersonaId(Long personaID) {
-        DocenteEntity docenteEntity = docenteRepository.findByPersona_Id(personaID).orElse(null);
-        if (docenteEntity == null) {
-            return false;
-        }
-        return true;
+    public void eliminarPorId(Long id) {
+        docenteRepository.deleteById(id);
     }
 
+    @Override
+    public boolean encontrarDocentePorPersonaId(Long id) {
+        DocenteEntity docenteEntity = docenteRepository.findByPersona_Id(id).orElse(null);
+        return docenteEntity != null;
+    }
+
+    @Override
+    public List<Docente> listarTodos() {
+        List<DocenteEntity> docenteEntities = docenteRepository.findAll();
+        return docenteEntities.stream()
+                .map(entity -> modelMapper.map(entity, Docente.class))
+                .collect(Collectors.toList());
+    }
 }

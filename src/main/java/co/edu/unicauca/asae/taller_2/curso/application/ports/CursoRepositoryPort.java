@@ -1,12 +1,16 @@
 package co.edu.unicauca.asae.taller_2.curso.application.ports;
 
+import java.util.List;
+
 import co.edu.unicauca.asae.taller_2.curso.domain.Curso;
 
 public interface CursoRepositoryPort {
 
-    public Curso crear(Curso curso);
+    Curso crear(Curso curso);
 
-    public Curso encontrarPorId(Long ID);
+    Curso encontrarPorId(Long id);
 
-    public void eliminarPorId(Long ID);
+    void eliminarPorId(Long id);
+
+    List<Curso> listarTodos();
 }

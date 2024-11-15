@@ -1,5 +1,8 @@
 package co.edu.unicauca.asae.taller_2.users.infrastructure.persistence.adapters;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,20 +17,33 @@ public class AdministrativoRepositoryAdapter implements AdministrativoRepository
 
     @Autowired
     private AdministrativoRepository administrativoRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
+    @Override
     public Administrativo crear(Administrativo administrativo) {
         AdministrativoEntity administrativoEntity = modelMapper.map(administrativo, AdministrativoEntity.class);
         administrativoEntity = administrativoRepository.save(administrativoEntity);
         return modelMapper.map(administrativoEntity, Administrativo.class);
     }
 
-    public Administrativo encontrarPorId(Long ID) {
-        AdministrativoEntity administrativoEntity = administrativoRepository.findById(ID).orElse(null);
-        if (administrativoEntity != null) {
-            return modelMapper.map(administrativoEntity, Administrativo.class);
-        }
-        return null;
+    @Override
+    public Administrativo encontrarPorId(Long id) {
+        AdministrativoEntity administrativoEntity = administrativoRepository.findById(id).orElse(null);
+        return administrativoEntity != null ? modelMapper.map(administrativoEntity, Administrativo.class) : null;
+    }
+
+    @Override
+    public List<Administrativo> listarTodos() {
+        List<AdministrativoEntity> administrativoEntities = administrativoRepository.findAll();
+        return administrativoEntities.stream()
+                .map(entity -> modelMapper.map(entity, Administrativo.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void eliminarPorId(Long id) {
+        administrativoRepository.deleteById(id);
     }
 }

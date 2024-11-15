@@ -1,13 +1,17 @@
 package co.edu.unicauca.asae.taller_2.docente.application.ports;
 
+import java.util.List;
+
 import co.edu.unicauca.asae.taller_2.docente.domain.Docente;
 
 public interface DocenteRepositoryPort {
-    public Docente crear(Docente docente);
+    Docente crear(Docente docente);
 
-    public Docente encontrarPorId(Long ID);
+    Docente encontrarPorId(Long id);
 
-    public void eliminarPorId(Long ID);
+    void eliminarPorId(Long id);
 
-    public boolean encontrarDocentePorPersonaId(Long personaID);
+    boolean encontrarDocentePorPersonaId(Long id);
+
+    List<Docente> listarTodos();
 }

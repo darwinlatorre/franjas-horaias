@@ -1,9 +1,15 @@
 package co.edu.unicauca.asae.taller_2.asignatura.application.ports;
 
+import java.util.List;
+
 import co.edu.unicauca.asae.taller_2.asignatura.domain.Asignatura;
 
 public interface AsignaturaRepositoryPort {
-    public Asignatura crear(Asignatura asignatura);
+    Asignatura crear(Asignatura asignatura);
 
-    public Asignatura encontrarPorID(Long ID);
+    Asignatura encontrarPorId(Long id);
+
+    List<Asignatura> listarTodos();
+
+    void eliminarPorId(Long id);
 }

@@ -6,9 +6,13 @@ import co.edu.unicauca.asae.taller_2.espacio_fisico.domain.EspacioFisico;
 
 public interface EspacioFisicoRepositoryPort {
 
-    public EspacioFisico crear(EspacioFisico espacioFisico);
+    EspacioFisico crear(EspacioFisico espacioFisico);
 
-    public EspacioFisico encontrarPorID(Long ID);
+    EspacioFisico encontrarPorId(Long id);
 
-    public List<EspacioFisico> listarPorKeyword(String nombre, int capacidadMinima);
+    List<EspacioFisico> listarPorKeyword(String nombre, int capacidadMinima);
+
+    List<EspacioFisico> listarTodos();
+
+    void eliminarPorId(Long id);
 }

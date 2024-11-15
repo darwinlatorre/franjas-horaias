@@ -21,26 +21,42 @@ public class EspacioFisicoRepositoryAdapter implements EspacioFisicoRepositoryPo
     private ModelMapper modelMapper;
 
     @Transactional
+    @Override
     public EspacioFisico crear(EspacioFisico espacioFisico) {
         EspacioFisicoEntity espacioFisicoEntity = modelMapper.map(espacioFisico, EspacioFisicoEntity.class);
         espacioFisicoRepository.save(espacioFisicoEntity);
         return modelMapper.map(espacioFisicoEntity, EspacioFisico.class);
     }
 
+    @Override
+    public EspacioFisico encontrarPorId(Long id) {
+        EspacioFisicoEntity espacioFisico = espacioFisicoRepository.findById(id).orElse(null);
+        return espacioFisico != null ? modelMapper.map(espacioFisico, EspacioFisico.class) : null;
+    }
+
     @Transactional
+    @Override
     public List<EspacioFisico> listarPorKeyword(String nombre, int capacidadMinima) {
         List<EspacioFisicoEntity> espacioFisicoEntities = espacioFisicoRepository
                 .findByNombreIgnoreCaseStartingWithAndCapacidadGreaterThanEqualOrderByNombreAsc(nombre,
                         capacidadMinima);
 
         return espacioFisicoEntities.stream()
-                .map(EspacioFisicoEntity -> modelMapper.map(EspacioFisicoEntity, EspacioFisico.class))
+                .map(entity -> modelMapper.map(entity, EspacioFisico.class))
                 .collect(Collectors.toList());
-
     }
 
-    public EspacioFisico encontrarPorID(Long ID) {
-        EspacioFisicoEntity espacioFisico = espacioFisicoRepository.findById(ID).orElse(null);
-        return modelMapper.map(espacioFisico, EspacioFisico.class);
+    @Override
+    public List<EspacioFisico> listarTodos() {
+        List<EspacioFisicoEntity> espacioFisicoEntities = espacioFisicoRepository.findAll();
+        return espacioFisicoEntities.stream()
+                .map(entity -> modelMapper.map(entity, EspacioFisico.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void eliminarPorId(Long id) {
+        espacioFisicoRepository.deleteById(id);
     }
 }
